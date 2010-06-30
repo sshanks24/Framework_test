@@ -40,11 +40,14 @@ begin
   g.populate_links_array
   g.links_array[1].each do |link_text|
     # Skipping the first link - it causes problems
-    if link_text != 'Liebert DS' and link_text != ''
+    begin
       puts "Trying link: #{link_text}"
       $ie.frame(:index, 2).link(:text, link_text).click
       sleep(2)
       g.table_to_ss(3,ws,link_text)
+    rescue => e
+      puts "Error occured: #{e}"
+      next
     end
   end
 
