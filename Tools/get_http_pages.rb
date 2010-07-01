@@ -187,7 +187,7 @@ $browser = Watir::IE.attach(:url, "http://126.4.202.95/")
 #$browser.show_frames
 #$browser.frame(:name, frame_name).text_fields.each { |t| puts t.to_s }
 #$browser.frame(:name, frame_name).spans.each { |s| puts s.to_s }
-$browser.frame(:index, 2).images.each { |l| puts l.src }
+$browser.frame(:index, 2).links.each { |l| puts l }
 #$browser.frame(:name, frame_name).select_lists.each { |s| puts s.to_s }
 #$browser.frame(:name, frame_name).labels.each { |l| puts l.to_s }
 

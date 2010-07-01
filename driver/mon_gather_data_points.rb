@@ -30,23 +30,31 @@ begin
 
   $ie.speed = :zippy
   ws = wb.Worksheets('Data')
-  
-  # Meat goes here...
-  g.monitor.click
 
   g.count_frames
-  g.expand_folderplus
-  g.expand_folderplus  # For multiple levels
+  g.monitor.click
+  sleep(2)
+  while g.count_images('folderplus.gif') > 0
+    g.click_all('folderplus.gif')
+  end
+
   g.populate_links_array
-  g.links_array[1].each do |link_text|
-    # Skipping the first link - it causes problems
+
+  #Clean up the links array for the navigation frame
+  
+  g.links_array[1].each do |link|
     begin
-      puts "Trying link: #{link_text}"
-      $ie.frame(:index, 2).link(:text, link_text).click
-      sleep(2)
-      g.table_to_ss(3,ws,link_text)
+      #We don't want to click links with parenthesis for this test case
+      unless link.text =~ /\(\d*\)/ then
+        puts "Trying link: #{link.text}"
+        $ie.frame(:index, 2).link(:id, link.id).click
+        sleep(2) #Wait for the table to finish populating
+        g.table_to_ss(3,ws,link.text)
+      end
     rescue => e
-      puts "Error occured: #{e}"
+      if e =~ /unknown property or method/ then
+        puts "Error occured - probably ok to ignore, here it is just in case:\n #{e}"
+      end
       next
     end
   end

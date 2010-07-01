@@ -34,7 +34,7 @@ class Generic < Generic_parent
      @row_ptr = 2 #Start righting at row 2
      @links_array = Array.new
   end
-
+ 
 end
 
 

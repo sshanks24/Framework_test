@@ -362,30 +362,21 @@ module Nav
   # - Information table iterator for web firmware update
   def param_firmwrweb(idx,row_start,j);$ie.table(:index, "#{idx}")[row_start][j]; end
 
-  # - Returns the number of frames by capturing the output of show_frames,
-  # - counting the number of lines, and subtracting 1
-  def count_frames
-    frame_text = redirect {$ie.show_frames}
-    frame_text.each_line {|line| @num_frames += 1}
-    @num_frames -= 1
-  end
-  
   # - Returns an array with all of the text based hyperlinks
   #TODO - extend to accept an argument to populate different link types
   def populate_links_array
     for i in 1..@num_frames
       @links_array[i] = Array.new
-      $ie.frame(:index, i).links.each { |l| @links_array[i] << l.text }
+      $ie.frame(:index, i).links.each { |l| @links_array[i] << l }
     end
     @links_array.compact!
   end
 
-  # - Searches through each frame for images named folderplus.gif and clicks
-  #TODO - This could be extended to accept regex as an argument (folderplus.gif)
-  def expand_folderplus
+  # - Searches through each frame for images named <code>image_name</code> and clicks
+  def click_all(image_name)
     for i in 1..@num_frames
-      $ie.frame(:index, 2).images.each do |image|
-        if image.src =~ /folderplus.gif/
+      $ie.frame(:index, i).images.each do |image|
+        if image.src =~ /#{image_name}/
           image.click
           sleep(1.5)
         end
@@ -393,6 +384,28 @@ module Nav
     end
   end
   
+  #This method is used to count the number of images
+  def count_images(image_name)
+    image_count = 0
+    for i in 1..@num_frames
+      $ie.frame(:index, i).images.each do |image|
+        if image.src =~ /#{image_name}/
+          image_count +=1
+        end
+      end
+    end
+    puts "Found #{image_count} occurences of #{image_name}"
+    return image_count
+  end
+  
+  # - Returns the number of frames by capturing the output of show_frames,
+  # - counting the number of lines, and subtracting 1
+  def count_frames
+    frame_text = self.redirect {$ie.show_frames}
+    frame_text.each_line {|line| @num_frames += 1}
+    @num_frames -= 1
+  end
+
   #This method is used to redirect stdout to a string
   def redirect
     orig_defout = $defout

@@ -196,9 +196,9 @@ class Generic_parent
   def table_to_ss(frame_idx, ws, report_name)
     if self.has_table?(frame_idx)
       $ie.frame(:index,frame_idx).tables.each do |table|
-        ws.cells(@row_ptr, 1).value = report_name.to_s #Writes the link(report)
-        if table.row_count > 1
+        if table.row_count > 1 #Header tables only have 1 row - we don't want those.
           for i in 2..table.row_count
+            ws.cells(@row_ptr, 1).value = report_name.to_s #Writes the link(report)
             for j in 2..table.column_count
               if report_name =~ /\[.*\]/ and j == 2 then # Special case for multi-modules
                ws.cells(@row_ptr, j).value = table[i][j].text + " (#{report_name})"
