@@ -52,10 +52,12 @@ begin
         g.table_to_ss(3,ws,link.text)
       end
     rescue => e
-      if e =~ /unknown property or method/ then
-        puts "Error occured - probably ok to ignore, here it is just in case:\n #{e}"
+      if e.to_s =~ /unknown property or method/ then
+        next #Ignore this error and continue the loop - I think it raises an
+             #exception because it is trying to access the text of an image...
+      else
+        puts e.to_s
       end
-      next
     end
   end
 

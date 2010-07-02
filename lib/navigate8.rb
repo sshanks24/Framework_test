@@ -351,7 +351,6 @@ module Nav
   # - Web server refresh interval text field
   def refresh; det.form(:name, 'configWeb').text_field(:id, 'webRefresh'); end
  
-
   # - Information table iterator
   def param_descr(idx,row_start,j); det.table(:index, "#{idx}")[row_start][j]; end
 
@@ -378,7 +377,7 @@ module Nav
       $ie.frame(:index, i).images.each do |image|
         if image.src =~ /#{image_name}/
           image.click
-          sleep(1.5)
+          sleep(1.5) #TODO Figure out a way to remove this sleep
         end
       end
     end

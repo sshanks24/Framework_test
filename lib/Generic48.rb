@@ -212,5 +212,33 @@ class Generic_parent
       end
     end
   end
-    
+
+  #  - returns a compacted array (no nil values)
+  #  - Variables
+  #  - title - The textual representation of the title, will match a regex
+  #  - frame_idx - numeric index of the frame in which the table of interest
+  #  - belongs.
+  #  - title_pos - the position in the table in which the 'title' lies.
+  #  - Note that tables indices start at 1.  Ruby arrays index at 0...
+  def get_table_by_title(title,frame_idx=3,title_pos=[1,2])
+    $ie.frame(:index,frame_idx).tables.each do |table|
+      if table[title_pos[0]][title_pos[1]].text =~ /#{title}/
+        return table.to_a.compact
+      end
+    end
+    return nil
+  end
+
+end
+
+class Array
+  #  - An attempt to simplify code that writes to a spreadsheet - Not working
+  #TODO - Make to_spread_sheet method work
+  def to_spread_sheet(ws,row_start=1,col_start=1)
+    self.each do |item|
+      ws.cells(row_start, col_start).value = item
+      row_start += 1
+      col_start += 1
+    end
+  end
 end

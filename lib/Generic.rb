@@ -26,8 +26,8 @@ $:.include? File.dirname(__FILE__)
 require 'Generic48' # Put the latest version of Generic(xx).rb here
 
 class Generic < Generic_parent
-  attr_accessor :links_array
-  attr_reader :num_frames, :row_ptr
+  attr_accessor :links_array, :row_ptr
+  attr_reader :num_frames
 
   def initialize
      @num_frames = 0

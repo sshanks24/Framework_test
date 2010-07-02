@@ -174,7 +174,7 @@ class LMG_Http
   end
 end
 
-$browser = Watir::IE.attach(:url, "http://126.4.202.95/")
+$browser = Watir::IE.attach(:url, "http://126.4.202.91/")
 
 #$browser.frame(:index,3).tables.each do |table|
 #  if table.row_count > 1
@@ -187,18 +187,28 @@ $browser = Watir::IE.attach(:url, "http://126.4.202.95/")
 #$browser.show_frames
 #$browser.frame(:name, frame_name).text_fields.each { |t| puts t.to_s }
 #$browser.frame(:name, frame_name).spans.each { |s| puts s.to_s }
-$browser.frame(:index, 2).links.each { |l| puts l }
+#$browser.frame(:index, 2).links.each { |l| puts l }
 #$browser.frame(:name, frame_name).select_lists.each { |s| puts s.to_s }
 #$browser.frame(:name, frame_name).labels.each { |l| puts l.to_s }
 
 #$browser.text_fields.each { |t| puts t.to_s }
 #$browser.spans.each { |s| puts s.to_s }
-#$browser.show_tables
+#browser.show_tables
 #$browser.links.each { |l| puts l.to_s }
 #$browser.select_lists.each { |s| puts s.to_s }
 #$browser.labels.each { |l| puts l.to_s }
 
-
-
-
+frame_idx = 3
+title_pos = [1,2]
+title = 'Supported Events'
+$browser.frame(:index,frame_idx).tables.each do |table|
+  begin
+      if table[title_pos[0]][title_pos[1]].text =~ /#{title}/
+        return table.to_a.compact
+      end
+  rescue e
+    puts e.to_s
+    next
+  end
+end
 
