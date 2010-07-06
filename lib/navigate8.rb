@@ -21,10 +21,14 @@
 
 module Nav
 
- 
-  #  - Tab area frameset abstration
-  def tab; $ie; end
 
+  #  - Tab area frameset abstration
+  def tab
+    frame_text = self.redirect {$ie.show_frames}
+    if frame_text =~ /tabArea/ then $ie.frame(:name, 'tabArea')
+    else $ie
+    end
+  end
 
   # - monitor tab link
   def monitor; tab.image(:name, 'imgMonitor'); end
@@ -40,7 +44,7 @@ module Nav
 
 
   # - Navigation link frameset abstration
-  def nav; $ie.frame(:name, 'navTreeArea'); end
+  def nav; $ie.frame(:name, 'infoArea').frame(:name, 'navTreeArea'); end
 
 
   # - Equipment / Agent Information navigation link.
@@ -101,7 +105,11 @@ module Nav
   #   - radio button
   #   - text fields
   #   - tables
-  def det; $ie.frame(:name, 'infoArea').frame(:name, 'detailArea'); end
+  def det
+    if has_frame?('infoArea') then  $ie.frame(:name, 'infoArea').frame(:name, 'detailArea')
+    else $ie.frame(:index, 3)
+    end
+  end
 
 
   # - Edit button
@@ -111,7 +119,7 @@ module Nav
   # - Reset button
   def reset; det.button(:value, 'Reset'); end
 
-  
+
   # - Equipment Name text field
   def name; det.form(:name, 'configDevice').text_field(:id, 'deviceName'); end
   # - Equipment Contact text field
@@ -136,7 +144,7 @@ module Nav
   def web_file; $ie.form(:name, 'firmwareHttpForm').file_field(:id, 'Firmware File Upload'); end
   # - Firmware Update button
   def web_updt; $ie.button(:id, 'Submit'); end
-  
+
 
   # - TFTP update firmware button
   def tftp_updt; det.button(:id, 'tftpUpdateFirmware'); end
@@ -146,7 +154,7 @@ module Nav
   def tftp_port; det.form(:name, 'firmwareTftpForm').text_field(:id, 'tftpPort'); end
   # - TFTP filename text field
   def tftp_file; det.form(:name, 'firmwareTftpForm').text_field(:id, 'tftpFilename'); end
-  
+
 
   # - Network settings speed/duplex select list
   def net_speed; det.form(:name, 'configNetwork').select_list(:id, 'ethernetSpeed'); end
@@ -158,7 +166,7 @@ module Nav
   def net_subnet; det.form(:name, 'configNetwork').text_field(:id, 'subnetMask'); end
   # - Network settings default gateway text field
   def net_gateway; det.form(:name, 'configNetwork').text_field(:id, 'defaultGateway'); end
-  
+
 
   # - DNS mode radio buttons
   def dns_mode(mode); det.radio(:name, 'networkDnsModeGroup',"#{mode}"); end
@@ -186,14 +194,14 @@ module Nav
   def timesync(rate); det.radio(:name, 'timeSyncGroup',"#{rate}"); end
   # - Time(SNTP) timezone select list
   def timezone; det.select_list(:id, 'timezone'); end
-  
+
 
   # - Management protocol snmp agent checkbox
   def snmp_en; det.checkbox(:id, 'enableSNMP'); end
   # - Management protocol Velocity v.4 Server checkbox
   def v4_en; det.checkbox(:id, 'enableVelocity'); end
 
-  
+
   # - SNMP authentication traps checkbox
   def snmp_auth; det.checkbox(:id, 'authenticateTrap'); end
   # - SNMP heartbeat trap interval select list
@@ -208,7 +216,7 @@ module Nav
   def lgptraps; det.checkbox(:id, 'lgpCondTrap'); end
   # - SNMP system notify traps checkbox
   def sysnotify; det.checkbox(:id, 'lgpSysNotifyTrap'); end
-  
+
 
   # - SNMP access ip addess text field
   def access_addr(row); det.form(:name, 'configSnmpAccess').text_field(:name, "accessIpAddress?#{row}"); end
@@ -219,7 +227,7 @@ module Nav
   # - SNMP access clear entry button
   def access_clr(row); det.button(:name, "accessClear?#{row}"); end
 
-  
+
   # - SNMP trap ip addess text field
   def trap_addr(row); det.form(:name, 'configSnmpTraps').text_field(:name, "tIpA?#{row}"); end
   # - SNMP trap port text field
@@ -233,7 +241,7 @@ module Nav
   # - SNMP test heartbeat trap button
   def test_hb; det.button(:name, 'hbTestButton'); end
 
-  
+
   # - Messaging email enable checkbox
   def email_msg; det.checkbox(:id, 'enableSmtpEmail'); end
   # - Messaging sms enable checkbox
@@ -270,7 +278,7 @@ module Nav
   def sms_port; det.form(:name, 'configSmtpSms').text_field(:id, 'smtpPort'); end
   # - SMS test button
   def sms_test;  det.button(:id, 'testSmsControl'); end
-  
+
 #define customize message functions
   # - Email include ip address checkbox
   def email_addr; det.checkbox(:id, 'enableEmailIPAddress'); end
@@ -292,8 +300,8 @@ module Nav
   def email_consoltime; det.form(:name, 'configSmtpMsg').text_field(:id, 'timeLimitEmailConsolidation'); end
   # - Email consolidation event limit checkbox
   def email_consolevt; det.form(:name, 'configSmtpMsg').text_field(:id, 'eventLimitEmailConsolidation'); end
-  
-  
+
+
   # - SMS include ip address checkbox
   def sms_addr; det.checkbox(:id, 'enableSMSIPAddress'); end
   # - SMS include event description checkbox
@@ -350,16 +358,17 @@ module Nav
   def cfgctrl; det.checkbox(:id, 'enableWebCfgCtrl'); end
   # - Web server refresh interval text field
   def refresh; det.form(:name, 'configWeb').text_field(:id, 'webRefresh'); end
- 
+
+
   # - Information table iterator
   def param_descr(idx,row_start,j); det.table(:index, "#{idx}")[row_start][j]; end
 
-  # - Support table 
-  #def supprt; det.table(:index, 2).to_a .compact; end
-  def supprt;$ie.frame(:index, 3).frame(:index, 3).table(:index, 2).to_a .compact;end
-  
+  # - Support table
+  def supprt; det.table(:index, 2).to_a .compact; end
+
   # - Information table iterator for web firmware update
   def param_firmwrweb(idx,row_start,j);$ie.table(:index, "#{idx}")[row_start][j]; end
+
 
   # - Returns an array with all of the text based hyperlinks
   #TODO - extend to accept an argument to populate different link types
