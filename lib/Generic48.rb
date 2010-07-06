@@ -170,7 +170,6 @@ class Generic_parent
     end
   end  
 
-  
   #    
   #  - read checkbox status and return set of clear
   def checkbox(box)
@@ -189,6 +188,13 @@ class Generic_parent
        str << t.to_s
     end
     return !str.empty?
+  end
+
+  #  - returns true or false if the web page under test has a frame named
+  #  - <code>frame_name</code>
+  def has_frame?(frame_name)
+    frame_text = self.redirect {$ie.show_frames}
+    !frame_text.match("#{frame_name}").nil?
   end
 
   #  - writes table contents in frame <code>frame_idx</code> (less header row)
@@ -219,7 +225,7 @@ class Generic_parent
   #  - frame_idx - numeric index of the frame in which the table of interest
   #  - belongs.
   #  - title_pos - the position in the table in which the 'title' lies.
-  #  - Note that tables indices start at 1.  Ruby arrays index at 0...
+  #  - Note that tables indices start at 1.  Ruby arrays index start at 0...
   def get_table_by_title(title,frame_idx=3,title_pos=[1,2])
     $ie.frame(:index,frame_idx).tables.each do |table|
       if table[title_pos[0]][title_pos[1]].text =~ /#{title}/
@@ -232,13 +238,21 @@ class Generic_parent
 end
 
 class Array
-  #  - An attempt to simplify code that writes to a spreadsheet - Not working
-  #TODO - Make to_spread_sheet method work
-  def to_spread_sheet(ws,row_start=1,col_start=1)
-    self.each do |item|
-      ws.cells(row_start, col_start).value = item
+  #  - An attempt to generalize outputting an array of values to a result spread
+  #  - sheet.
+  #  - Variables
+  #  - ws - the worksheet to write the array to
+  #  - depth - for multi-dimensional arrays - think # of columns
+  #  - row_start -
+  #  - col_start - 
+  def to_spread_sheet(ws,depth=1,row_start=1,col_start=1)
+    self.each_slice(depth) do |row|
+      col = col_start
+      row.each do |item|
+        ws.cells(row_start, col).value = item.to_s
+        col +=1
+      end
       row_start += 1
-      col_start += 1
     end
   end
 end
