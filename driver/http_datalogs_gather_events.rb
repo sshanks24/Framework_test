@@ -1,6 +1,6 @@
 =begin rdoc
 *Revisions*
-  | Initial File | Scott Shanks | DATE |
+  | Initial File | Scott Shanks | 07/08/2010 |
 
 *Test_Script_Name*
   http_datalogs_gather_events
