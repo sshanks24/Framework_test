@@ -105,7 +105,8 @@ module Nav
   def cfgweb; nav.link(:text => 'Web', :index => 2); end
   # - SNMP Capabitlites - Events - Link
   def events; nav.link(:text => 'Events'); end;
-
+  # - SNMP Capabitlites - Parameters - Link
+  def parameters; nav.link(:text => 'Parameters'); end;
 
 
   # - Detail Area frameset abstraction for:
