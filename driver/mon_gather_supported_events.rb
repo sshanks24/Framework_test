@@ -45,8 +45,14 @@ begin
       unless link.text =~ /\(\d*\)/ then
         puts "Trying link: #{link.text}"
         $ie.frame(:index, 2).link(:id, link.id).click
-        sleep(2) #Wait for the table to finish populating
-        supported_events << g.get_table_by_title('Supported Events')
+        #Wait for the table to finish populating
+        sleep(2)
+        if link.text =~ /\[\d*\]/ then
+          #Need to figure out how to append the link.text to this array
+          supported_events << g.get_table_by_title('Supported Events')
+        else
+          supported_events << g.get_table_by_title('Supported Events')
+        end
       end
     rescue => e
       if e.to_s =~ /unknown property or method/ then
@@ -60,7 +66,7 @@ begin
   supported_events = supported_events.flatten.compact
   supported_events.delete_if{|i| i == ""}
   puts supported_events.inspect
-  supported_events.to_spread_sheet(ws,g.row_ptr,2) unless supported_events.nil?
+  supported_events.to_spread_sheet(ws,2,g.row_ptr) unless supported_events.nil?
 
   f = Time.now  #finish time
 rescue Exception => e
