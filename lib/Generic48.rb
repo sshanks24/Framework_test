@@ -246,7 +246,8 @@ class Array
   #  - row_start -
   #  - col_start - 
   def to_spread_sheet(ws,depth=1,row_start=1,col_start=1)
-    self.each_slice(depth) do |row|
+    tmp = self.flatten
+    tmp.each_slice(depth) do |row|
       col = col_start
       row.each do |item|
         ws.cells(row_start, col).value = item.to_s
