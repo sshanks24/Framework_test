@@ -38,13 +38,20 @@ module Nav
   def config; tab.image(:id, 'imgConfigure'); end
   # - event log tab link
   def evtlog; tab.image(:id, 'imgEventLog'); end
+  # - data logs tab link
+  def datalogs; tab.image(:id, 'imgDatalogs'); end
   # - support tab link
   def supp; tab.image(:id, 'imgSupport'); end
 
 
 
   # - Navigation link frameset abstration
-  def nav; $ie.frame(:name, 'infoArea').frame(:name, 'navTreeArea'); end
+  def nav
+    frame_text = self.redirect {$ie.show_frames}
+    if frame_text =~ /infoArea/ then $ie.frame(:name, 'infoArea').frame(:name, 'navTreeArea')
+    else $ie.frame(:id, 'navigationFrame')
+    end
+  end
 
 
   # - Equipment / Agent Information navigation link.
@@ -96,6 +103,8 @@ module Nav
   def users; nav.link(:text, 'Users'); end
   # - Web Configuration link
   def cfgweb; nav.link(:text => 'Web', :index => 2); end
+  # - SNMP Capabitlites - Events - Link
+  def events; nav.link(:text => 'Events'); end;
 
 
 
