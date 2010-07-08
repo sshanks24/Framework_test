@@ -18,7 +18,6 @@
 $:.unshift File.dirname(__FILE__).chomp('driver')<<'lib' # add library to path
 s = Time.now
 require 'generic'
-require 'V4cooling'
 
 begin
   puts" \n Executing: #{(__FILE__)}\n\n" # print current filename
