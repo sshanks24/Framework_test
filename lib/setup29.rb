@@ -162,5 +162,10 @@ module  Setup
     end
     wb.Save
   end
-           
+
+  def snmp_setup(wb)
+    ws = wb.Worksheets('SupportInfo')
+    @test_site = ws.range('B3').value 
+    @community_string = ws.range('B5').value # Use the password field for the community string
+  end
 end
