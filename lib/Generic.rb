@@ -27,12 +27,16 @@ require 'Generic48' # Put the latest version of Generic(xx).rb here
 
 class Generic < Generic_parent
   attr_accessor :links_array, :row_ptr
-  attr_reader :num_frames
+  attr_reader :num_frames, :test_site, :community_string
 
   def initialize
      @num_frames = 0
      @row_ptr = 2 #Start righting at row 2
      @links_array = Array.new
+
+    #SNMP Related Class Variables
+    @test_site = ''
+    @community_string = ''
   end
  
 end
