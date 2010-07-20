@@ -44,14 +44,14 @@ module  Snmp
     a = Array.new
     snmp_data.each_line do |line|
       if line =~ /No more variables/ then next; end;
-      a << line.split('=')[0].strip
+      a << line.split('=')[0].strip # This should be the oid
       line.split('=')[1].each do |value|
-        a << value.split(': ')[1].strip.each do |str| #This should be the value
-          if str.match(/\d{4}/) or str.match(/\w\.\d*/) #TODO - Cleanup certain values in the walk...
-            a << str.split('::')[1]
-          else
-            a << str.split('::')[1]
-          end
+        value.split(': ')[1].strip.each do |str| #This should be the value + any relavent units
+          #if str.match(/\d{4}/) or str.match(/\w\.\d*/) #TODO - Cleanup certain values in the walk...
+           # a << str.split('::')[1]
+          #else
+            a << str
+          #end
         end
         a << value.split(':')[0].strip  #This should be the type (e.g STRING)
         end
