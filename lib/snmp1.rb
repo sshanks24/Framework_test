@@ -47,14 +47,23 @@ module  Snmp
       a << line.split('=')[0].strip # This should be the oid
       line.split('=')[1].each do |value|
         value.split(': ')[1].strip.each do |str| #This should be the value + any relavent units
-          #if str.match(/\d{4}/) or str.match(/\w\.\d*/) #TODO - Cleanup certain values in the walk...
-           # a << str.split('::')[1]
-          #else
-            a << str
-          #end
+          case value.split(':')[0].strip #This case statement parses the units according to type.
+          when /string/i then a << str << ""
+          when /oid/i then a << str << ""
+          #This mess below probably deserves an explanation...
+          #We are parsing the value + unit string by ' ', add the first piece to
+          #the array we will return, and re-combine the remainder of what we
+          #parsed to add to the array as one string.
+          #There is probably a cleaner way of doing this... but it works for now
+          #e.g. 320 .1 degrees celsius
+          # a << 320 << .1 + ' ' + 'degrees' + ' ' + celsius + ' '
+          when /integer/i then a << str.split(' ')[0] << str.split(' ')[1..str.split(' ').length-1].collect {|x| x + " "}.to_s
+          when /gauge32/i then a << str.split(' ')[0] << str.split(' ')[1..str.split(' ').length-1].collect {|x| x + " "}.to_s
+          else a << str << ""
+          end
         end
         a << value.split(':')[0].strip  #This should be the type (e.g STRING)
-        end
+      end
       end
     return a
   end

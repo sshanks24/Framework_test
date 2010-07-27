@@ -31,7 +31,7 @@ begin
 
   begin
     g.snmp_setup(wb)
-    g.snmp_walk(g.test_site,g.community_string,'2c','private').to_spread_sheet(ws,3,2)
+    g.snmp_walk(g.test_site,g.community_string,'2c','private').to_spread_sheet(ws,4,2)
   end
 
   f = Time.now  #finish time
