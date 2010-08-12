@@ -139,7 +139,6 @@ module  Setup
     }
   end
 
-   
   #    - collects support page table:
  
   def support(xl)
