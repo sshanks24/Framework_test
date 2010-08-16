@@ -47,10 +47,11 @@ end
 ###script running
 puts" \n Executing: #{(__FILE__)}\n\n" # show current filename
 
+ip = '126.4.202.95' if ip.empty?
 # Chnage the default ip to your normal test device
-puts "Enter the IP Address (press enter for 126.4.202.212):"
+puts "Enter the IP Address (press enter for #{ip}):"
 ip = gets.chomp!
-ip = '126.4.202.212' if ip.empty?
+ip = '126.4.202.95' if ip.empty?
 
 
 param = setup(__FILE__)

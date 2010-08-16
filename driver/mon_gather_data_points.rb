@@ -9,7 +9,9 @@
   multiple
 
 *Description*
-  Gather all datapoints and write to a spreadsheet
+  Gathers all datapoints from the monitor tab and write to a spreadsheet.
+This script uses the populate_links_array method to build an array of all text
+based links on the navigation pane.
 
 *Variable_Definitions*
 
